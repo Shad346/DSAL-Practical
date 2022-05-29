@@ -1,252 +1,193 @@
-#include<iostream>
-#include<stdlib.h>
-#include<string.h>
+#include <iostream>
+#include<string>
 using namespace std;
-struct node
-{   char name[20];
-     node *next;
-     node *down;
-      int flag;
-};
-class Gll
-{   char ch[20];    int n,i;    
-     node *head=NULL,*temp=NULL,*t1=NULL,*t2=NULL;
-     public:
-     node *create();
-     void insertb();
-     void insertc();
-     void inserts();
-     void insertss();
-     void displayb();
-    
-};
-node *Gll::create()
+
+class dictionary;
+class node
 {
-    node *p=new(struct node);
-    p->next=NULL;
-    p->down=NULL;
-    p->flag=0;
-    cout<<"\n enter the name";
-    cin>>p->name;
-    return p;
+  string word, meaning;
+  node *left, *right;
+public:
+    friend class dictionary;
+    node ()
+  {
+    left = NULL;
+    right = NULL;
+
+  }
+  node (string word, string meaning)
+  {
+    this->word = word;
+    this->meaning = meaning;
+    left = NULL;
+    right = NULL;
+  }
+};
+
+class dictionary
+{
+  node *root;
+public:
+    dictionary ()
+  {
+    root = NULL;
+  }
+  void create ();
+  void inorder_rec (node * rnode);
+  void postorder_rec (node * rnode);
+  void inorder ()
+  {
+    inorder_rec (root);
+  }
+  void postorder ();
+
+  bool insert (string word, string meaning);
+  int search (string key);
+
+};
+
+int
+dictionary::search (string key)
+{
+  node *tmp = root;
+  int count;
+  if (tmp == NULL)
+    {
+      return -1;
+    }
+  if (root->word == key)
+    return 1;
+  while (tmp != NULL)
+    {
+
+      if ((tmp->word) > key)
+	{
+	  tmp = tmp->left;
+	  count++;
+	}
+      else if ((tmp->word) < key)
+	{
+	  tmp = tmp->right;
+	  count++;
+	}
+      else if (tmp->word == key)
+	{
+	  return ++count;
+	}
+    }
+  return -1;
+
 }
-void Gll::insertb()
-{      
-        
-         if(head==NULL)
-           {    t1=create();
-                head=t1;
-           }
-           else
-           {
-              cout<<"\n book exist";
-           }   
-}     
-void Gll::insertc()
-{     
-      if(head==NULL)
-          { 
-                  cout<<"\n there is no book";   
-           }
-           else
-           {    cout<<"\n how many chapters you want to insert";
-                cin>>n;
-                for(i=0;i<n;i++)
-                {
-                t1=create();
-                if(head->flag==0)
-                {  head->down=t1;   head->flag=1;    }
-                else
-                {   temp=head;
-                     temp=temp->down;
-                    while(temp->next!=NULL)
-                         temp=temp->next;
-                     temp->next=t1;
-                }
-                }
-          }
-                    
-                              
-} 
-void Gll::inserts()
-{     
-  
-         if(head==NULL)
-          { 
-                  cout<<"\n there is no book";   
-           }
-           else
-           {    cout<<"\n Enter the name of chapter on which  you want to enter the section";
-                 cin>>ch;
-                
-                 temp=head;
-               if(temp->flag==0)
-               {   cout<<"\n their are no chapters on in book";
-               }
-               else
-               {    temp=temp->down;
-                while(temp!=NULL)
-                 { 
-                      if(!strcmp(ch,temp->name))
-                      {   
-                                cout<<"\n how many sections you want to enter";
-                                cin>>n;
-                                for(i=0;i<n;i++)
-                                {
-                                   
-                                           t1=create();
-                                               if(temp->flag==0)
-                                               {      temp->down=t1;
-                                                     
-                                                        temp->flag=1;  cout<<"\n******";
-                                                        t2=temp->down;
-                                                   
-                                               }
-                                              else
-                                               {           
-                                                              cout<<"\n#####";
-                                                               while(t2->next!=NULL)
-                                                               {     t2=t2->next;          }
-                                                                       t2->next=t1;                 
-                                                 }   
-                                 }                              
-                                   break;       
-                       }  
-                               temp=temp->next;
-                  }
-                }    
-         }
+
+void
+dictionary::postorder ()
+{
+  postorder_rec (root);
 }
-void Gll::insertss()
-{     
-  
-         if(head==NULL)
-          { 
-                  cout<<"\n there is no book";   
-           }
-           else
-           {    cout<<"\n Enter the name of chapter on which  you want to enter the section";
-                 cin>>ch;
-                
-                 temp=head;
-               if(temp->flag==0)
-               {   cout<<"\n their are no chapters on in book";
-               }
-               else
-               {    temp=temp->down;
-                while(temp!=NULL)
-                 { 
-                      if(!strcmp(ch,temp->name))
-                      {       
-                         cout<<"\n enter name of section in which you want to enter the sub section";
-                         cin>>ch;
-                        
-                        if(temp->flag==0)
-                        {   cout<<"\n their are no sections ";   }
-                         else
-                         {       temp=temp->down;
-                                 while(temp!=NULL)
-                                 {
-                                     if(!strcmp(ch,temp->name))
-                                     {
-                                      cout<<"\n how many subsections you want to enter";
-                                        cin>>n;
-                    for(i=0;i<n;i++)
-                                   {
-                                   
-                                           t1=create();
-                                               if(temp->flag==0)
-                                               {      temp->down=t1;
-                                                     
-                                                        temp->flag=1;  cout<<"\n******";
-                                                        t2=temp->down;
-                                                   
-                                               }
-                                              else
-                                               {           
-                                                              cout<<"\n#####";
-                                                               while(t2->next!=NULL)
-                                                               {     t2=t2->next;          }
-                                                                       t2->next=t1;                 
-                                                 }   
-                                        }                              
-                                         break;
-                                     }      temp=temp->next;
-                                   }
-                          }       
-                       }
-                         
-                               temp=temp->next;
-                  }
-                }    
-         }
-} 
-void Gll::displayb()
-{       
-               
-                if(head==NULL)
-                {  cout<<"\n book not exist"; 
-                }
-                else
-                {
-                 temp=head;
-                 
-                    cout<<"\n NAME OF BOOK:  "<<temp->name;
-                         if(temp->flag==1)
-                         {
-                         temp=temp->down;
-                        
-                           while(temp!=NULL)
-                           {     cout<<"\n\t\tNAME OF CHAPTER:  "<<temp->name;
-                                 t1=temp;
-                                 if(t1->flag==1)
-                                 {  t1=t1->down;
-                                    while(t1!=NULL)
-                                    {     cout<<"\n\t\t\t\tNAME OF SECTION:  "<<t1->name;
-                                          t2=t1;
-                                          if(t2->flag==1)
-                                          {  t2=t2->down;
-                                          while(t2!=NULL)
-                                          {     cout<<"\n\t\t\t\t\t\tNAME OF SUBSECTION:  "<<t2->name;     
-                                          t2=t2->next;
-                                          }
-                                          }     
-                                          t1=t1->next;
-                                    }
-                                 }   
-                                  temp=temp->next;
-                           }
-                        
-                          }
-                }         
-                     
-                  
-                  
-}                  
-int main()
-{    Gll g;   int x;  
-       while(1)
-      {    cout<<"\n\n enter your choice";
-            cout<<"\n 1.insert book";
-            cout<<"\n 2.insert chapter";
-            cout<<"\n 3.insert section";
-            cout<<"\n 4.insert subsection";
-            cout<<"\n 5.display book";
-            cout<<"\n 6.exit";
-            cin>>x;
-           switch(x)
-           {   case 1:          g.insertb();
-                                         break;             
-                case 2:          g.insertc();
-                                         break;      
-                case 3:          g.inserts();
-                                         break;
-                case 4:          g.insertss();
-                                         break;    
-                case 5:          g.displayb();
-                                         break;      
-                case 6:  exit(0);
-           }
-       }
-       return 0;
+
+void
+dictionary::postorder_rec (node * rnode)
+{
+  if (rnode)
+    {
+      postorder_rec (rnode->right);
+      cout << " " << rnode->word << " : " << rnode->meaning << endl;
+      postorder_rec (rnode->left);
+    }
+}
+
+void
+dictionary::create ()
+{
+  int n;
+  string wordI, meaningI;
+  cout << "\nHow many Word to insert?:\n";
+  cin >> n;
+  for (int i = 0; i < n; i++)
+    {
+      cout << "\nENter Word: ";
+      cin >> wordI;
+      cout << "\nEnter Meaning: ";
+      cin >> meaningI;
+      insert (wordI, meaningI);
+    }
+}
+
+void
+dictionary::inorder_rec (node * rnode)
+{
+  if (rnode)
+    {
+      inorder_rec (rnode->left);
+      cout << " " << rnode->word << " : " << rnode->meaning << endl;
+      inorder_rec (rnode->right);
+    }
+}
+
+bool
+dictionary::insert (string word, string meaning)
+{
+  node *p = new node (word, meaning);
+  if (root == NULL)
+    {
+      root = p;
+      return true;
+    }
+  node *cur = root;
+  node *par = root;
+  while (cur != NULL)		//traversal
+    {
+      if (word > cur->word)
+	{
+	  par = cur;
+	  cur = cur->right;
+	}
+      else if (word < cur->word)
+	{
+	  par = cur;
+	  cur = cur->left;
+	}
+      else
+	{
+	  cout << "\nWord is already in the dictionary.";
+	  return false;
+	}
+    }
+  if (word > par->word)		//insertion of node
+    {
+      par->right = p;
+      return true;
+    }
+  else
+    {
+      par->left = p;
+
+      return true;
+    }
+}
+
+int
+main ()
+{
+  string word;
+  dictionary months;
+  months.create ();
+  cout << "Ascending order\n";
+  months.inorder ();
+
+  cout << "\nDescending order:\n";
+  months.postorder ();
+
+  cout << "\nEnter word to search: ";
+  cin >> word;
+  int comparisons = months.search (word);
+  if (comparisons == -1)
+    {
+      cout << "\nNot found word";
+    }
+  else
+    {
+      cout << "\n " << word << " found in " << comparisons << " comparisons";
+    }
+  return 0;
 }
